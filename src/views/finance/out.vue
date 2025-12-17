@@ -10,22 +10,13 @@
         </el-form-item>
         <el-form-item label="币种">
           <el-select v-model="formLine.coin_id" style="width: 120px;" placeholder="请选择" clearable>
-            <el-option
-              v-for="item in selectList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+            <el-option v-for="item in selectList" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="时间">
-          <el-date-picker
-            v-model="formLine.date"
-            type="daterange"
-            value-format="yyyy-MM-dd"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
+          <el-date-picker v-model="formLine.date" type="daterange" value-format="yyyy-MM-dd" range-separator="至"
+            start-placeholder="开始日期" end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -46,73 +37,38 @@
         </el-radio-group>
       </div>
       <div style="padding: 20px;background: #f1f1f1;">
-        待审核：<b>{{tongji.waiting}}</b>，已完成：<b>{{tongji.success}}</b>
+        待审核：<b>{{ tongji.waiting }}</b>，已完成：<b>{{ tongji.success }}</b>
       </div>
-      <el-table
-        :data="tableData"
-        border
-        v-loading="loading"
-        style="width: 100%">
-        <el-table-column
-          prop="username"
-          label="用户"
-          align="center"
-          fixed="left"
-          width="120">
+      <el-table :data="tableData" border v-loading="loading" style="width: 100%">
+        <el-table-column prop="username" label="用户" align="center" fixed="left" width="120">
         </el-table-column>
-        <el-table-column
-          prop="team_flag"
-          label="团队标识"
-          min-width="80"
-          align="center">
+        <el-table-column prop="team_flag" label="团队标识" min-width="80" align="center">
         </el-table-column>
-        <el-table-column
-          prop="num"
-          label="提币数量"
-          align="center"
-          width="200">
+        <el-table-column prop="num" label="提币数量" align="center" width="200">
           <template slot-scope="{row}">
-            {{row.num}} {{row.coin}}
+            {{ row.num }} {{ row.coin }}
           </template>
         </el-table-column>
-        <el-table-column
-          prop="addr"
-          label="提币地址"
-          min-width="320"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          prop="coin_type"
-          label="合约类型"
-          align="center"
-          width="100">
-        </el-table-column>
-        <el-table-column
-          prop="fee"
-          label="手续费"
-          align="center"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="fee_rate"
-          label="费率"
-          align="center"
-          width="100">
+        <el-table-column prop="addr" label="提币地址" min-width="320" align="center">
           <template slot-scope="{row}">
-            {{row.fee_rate}} %
+            <div style="display: flex; align-items: center; justify-content: center;">
+              <span style="flex: 1; word-break: break-all;">{{ row.addr }}</span>
+              <el-button type="text" size="small" @click="onEditAddr(row)" style="margin-left: 10px;">修改</el-button>
+            </div>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="created_at"
-          width="160"
-          label="创建时间">
+        <el-table-column prop="coin_type" label="合约类型" align="center" width="100">
         </el-table-column>
-        <el-table-column
-          prop="status"
-          label="状态"
-          align="center"
-          fixed="right"
-          width="100">
+        <el-table-column prop="fee" label="手续费" align="center" width="120">
+        </el-table-column>
+        <el-table-column prop="fee_rate" label="费率" align="center" width="100">
+          <template slot-scope="{row}">
+            {{ row.fee_rate }} %
+          </template>
+        </el-table-column>
+        <el-table-column prop="created_at" width="160" label="创建时间">
+        </el-table-column>
+        <el-table-column prop="status" label="状态" align="center" fixed="right" width="100">
           <template slot-scope="{row}">
             <el-tag type="warning" v-if="row.status == 0">待审核</el-tag>
             <el-tag v-else-if="row.status == 1">已审核</el-tag>
@@ -121,67 +77,91 @@
             <el-tag type="info" v-else-if="row.status == 4">已失败</el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          fixed="right"
-          width="220">
+        <el-table-column label="操作" fixed="right" width="220">
           <template slot-scope="{row}">
             <el-button type="primary" :disabled="row.status != 0" size="small" @click="onDaifu(row.id)">审核</el-button>
-            <el-button type="danger" :disabled="row.status != 0 && row.status != 1" size="small" @click="onRefuse(row.id)">拒绝</el-button>
-            <el-button type="success" :disabled="row.status != 0 && row.status != 1" size="small" @click="onSuccess(row.id)">完成</el-button>
+            <el-button type="danger" :disabled="row.status != 0 && row.status != 1" size="small"
+              @click="onRefuse(row.id)">拒绝</el-button>
+            <el-button type="success" :disabled="row.status != 0 && row.status != 1" size="small"
+              @click="onSuccess(row.id)">完成</el-button>
           </template>
         </el-table-column>
       </el-table>
       <div class="pagination-box">
-        <el-pagination
-          background
-          layout="total, sizes, prev, pager, next, jumper"
-          :page-size="pagesize"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :total="meta.total">
+        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :page-size="pagesize"
+          @size-change="handleSizeChange" @current-change="handleCurrentChange" :total="meta.total">
         </el-pagination>
       </div>
     </el-card>
+
+    <!-- 修改地址弹出层 -->
+    <el-dialog title="修改提币地址" :visible.sync="addrDialogShow" width="600px">
+      <el-form :model="addrForm" label-width="100px">
+        <el-form-item label="用户名">
+          <el-input v-model="addrForm.username" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="币种">
+          <el-input v-model="addrForm.coin" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="原地址">
+          <el-input v-model="addrForm.oldAddr" type="textarea" :rows="3" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="新地址">
+          <el-input v-model="addrForm.addr" type="textarea" :rows="3" placeholder="请输入新的提币地址"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addrDialogShow = false">取 消</el-button>
+        <el-button type="primary" @click="submitAddrUpdate">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {coinSelectList} from '@/api/coin'
-import {getOutList, getOutTongji, doSuccess, doRefuse, doDaifu} from '@/api/finance'
+import { coinSelectList } from '@/api/coin'
+import { getOutList, getOutTongji, doSuccess, doRefuse, doDaifu, updateOutAddr } from '@/api/finance'
 
 export default {
   name: 'out',
-  data(){
+  data() {
     return {
-      dialogShow:false,
-      treeData:[],
-      nowRow:null,
+      dialogShow: false,
+      treeData: [],
+      nowRow: null,
       tableData: [],
-      page:1,
-      pagesize:20,
-      meta:{
-        total:0
+      page: 1,
+      pagesize: 20,
+      meta: {
+        total: 0
       },
-      activeType:'0',
-      loading:false,
-      formData:{
-        username:'',
-        coin_id:'',
-        amount:''
+      activeType: '0',
+      loading: false,
+      formData: {
+        username: '',
+        coin_id: '',
+        amount: ''
       },
-      updateForm:{
+      updateForm: {
 
       },
-      formLine:{
-        keyword:'',
-        name:'',
-        coin_id:'',
-        to_coin_id:'',
-        date:null
+      formLine: {
+        keyword: '',
+        name: '',
+        coin_id: '',
+        to_coin_id: '',
+        date: null
       },
-      selectList:[],
-      tongji:{waiting:'-',success:'-'}
+      selectList: [],
+      tongji: { waiting: '-', success: '-' },
+      addrDialogShow: false,
+      addrForm: {
+        id: '',
+        username: '',
+        coin: '',
+        oldAddr: '',
+        addr: ''
+      }
     }
   },
   computed: {
@@ -194,37 +174,37 @@ export default {
   activated() {
     this.getSelectList();
   },
-  methods:{
-    getSelectList(){
-      coinSelectList().then(res=>{
+  methods: {
+    getSelectList() {
+      coinSelectList().then(res => {
         this.selectList = res.data
       })
     },
-    search(){
+    search() {
       this.page = 1;
       this.getList();
     },
-    handleClickTab(val){
+    handleClickTab(val) {
       this.activeType = val;
       this.page = 1;
       this.getList();
     },
-    getList(){
-      var param = 'page='+this.page+"&pagesize="+this.pagesize
-        +"&keyword="+this.formLine.keyword+"&name="+this.formLine.name
-        +"&coin_id="+this.formLine.coin_id+"&status="+this.activeType;
-      if(this.formLine.date){
-        param += "&start="+this.formLine.date[0]+"&end="+this.formLine.date[1]
+    getList() {
+      var param = 'page=' + this.page + "&pagesize=" + this.pagesize
+        + "&keyword=" + this.formLine.keyword + "&name=" + this.formLine.name
+        + "&coin_id=" + this.formLine.coin_id + "&status=" + this.activeType;
+      if (this.formLine.date) {
+        param += "&start=" + this.formLine.date[0] + "&end=" + this.formLine.date[1]
       }
       this.loading = true;
-      getOutList(param).then(res=>{
+      getOutList(param).then(res => {
         this.loading = false;
         this.tableData = res.data;
         this.meta = res.meta;
-      }).catch(error=>{
+      }).catch(error => {
         this.loading = false;
       });
-      getOutTongji(param).then(res=>{
+      getOutTongji(param).then(res => {
         this.tongji = res.data
       })
     },
@@ -236,39 +216,72 @@ export default {
       this.page = val;
       this.getList();
     },
-    onSuccess(id){
+    onSuccess(id) {
       this.$confirm('是否完成此提现申请？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        doSuccess(id).then(res=>{
+        doSuccess(id).then(res => {
           this.getList();
           this.$message.success(res.message);
         });
       })
     },
-    onDaifu(id){
+    onDaifu(id) {
       this.$confirm('是否审核此提现申请？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        doDaifu(id).then(res=>{
+        doDaifu(id).then(res => {
           this.getList();
           this.$message.success(res.message);
         });
       })
     },
-    onRefuse(id){
+    onRefuse(id) {
       this.$confirm('是否拒绝此提现申请？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        doRefuse(id).then(res=>{
+        doRefuse(id).then(res => {
           this.getList();
           this.$message.success(res.message);
+        });
+      })
+    },
+    onEditAddr(row) {
+      this.addrForm = {
+        id: row.id,
+        username: row.username,
+        coin: row.coin,
+        oldAddr: row.addr,
+        addr: row.addr
+      };
+      this.addrDialogShow = true;
+    },
+    submitAddrUpdate() {
+      if (!this.addrForm.addr || this.addrForm.addr.trim() === '') {
+        this.$message.warning('请输入新的提币地址');
+        return;
+      }
+      if (this.addrForm.addr === this.addrForm.oldAddr) {
+        this.$message.warning('新地址与原地址相同');
+        return;
+      }
+      this.$confirm('确认修改该用户的提币地址吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        updateOutAddr(this.addrForm.id, { addr: this.addrForm.addr }).then(res => {
+          this.$message.success(res.message || '修改成功');
+          this.addrDialogShow = false;
+          this.getList();
+        }).catch(err => {
+          this.$message.error(err.message || '修改失败');
         });
       })
     }
@@ -276,6 +289,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

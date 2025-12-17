@@ -2,10 +2,11 @@
 <template>
   <div>
     <sticky class="form-sticky-bar" style="z-index: 999;" :sticky-top="80">
-      <el-button type="primary" icon="el-icon-success" @click="onSubmit" :loading="saving" :disabled="saving">保存</el-button>
+      <el-button type="primary" icon="el-icon-success" @click="onSubmit" :loading="saving"
+        :disabled="saving">保存</el-button>
     </sticky>
     <div class="app-container">
-      <el-form label-width="140px" :model="formData">
+      <el-form label-width="180px" :model="formData">
         <el-tabs type="border-card">
           <el-tab-pane label="基本设置">
             <el-form-item label="平台名称">
@@ -15,7 +16,8 @@
               <el-input v-model="formData.webtitle" style="width: 400px;"></el-input>
             </el-form-item>
             <el-form-item label="短信签名">
-              <el-input v-model="formData.sms_sign" style="width: 100px;"></el-input> 如短信内容为：<span style="color: #20a0ff;">【淘宝】您的验证码为:123。</span>则填：淘宝
+              <el-input v-model="formData.sms_sign" style="width: 100px;"></el-input> 如短信内容为：<span
+                style="color: #20a0ff;">【淘宝】您的验证码为:123。</span>则填：淘宝
             </el-form-item>
             <el-form-item label="平台结算币种">
               <el-input v-model="formData.account_coin" style="width: 100px;"></el-input> 如：人民币则填 CNY，美元则填 USD
@@ -37,33 +39,21 @@
             <el-form-item label="新用户注册">
               赠送 <el-input v-model="formData.reg_give" style="width: 100px;"></el-input> 个
               <el-select v-model="formData.reg_give_coin" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in coinList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value+''">
+                <el-option v-for="item in coinList" :key="item.value" :label="item.label" :value="item.value + ''">
                 </el-option>
               </el-select> 币
             </el-form-item>
             <el-form-item label="邀请一个用户">
               赠送 <el-input v-model="formData.invite_give" style="width: 100px;"></el-input> 个
               <el-select v-model="formData.invite_give_coin" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in coinList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value+''">
+                <el-option v-for="item in coinList" :key="item.value" :label="item.label" :value="item.value + ''">
                 </el-option>
               </el-select> 币
             </el-form-item>
             <el-form-item label="邀请用户首充" v-if="0">
               赠送 <el-input v-model="formData.invite_recharge_give" style="width: 100px;"></el-input> 个
               <el-select v-model="formData.invite_recharge_give_coin" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in coinList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value+''">
+                <el-option v-for="item in coinList" :key="item.value" :label="item.label" :value="item.value + ''">
                 </el-option>
               </el-select> 币
             </el-form-item>
@@ -75,16 +65,23 @@
             </el-form-item>
             <el-form-item label="代理奖励制度">
               <div>一级代理<el-input v-model="formData.invite_bonus_1" style="width: 100px;"></el-input>%</div>
-              <div style="margin-top:10px;">二级代理<el-input v-model="formData.invite_bonus_2" style="width: 100px;"></el-input>%</div>
-              <div style="margin-top:10px;">三级代理<el-input v-model="formData.invite_bonus_3" style="width: 100px;"></el-input>%</div>
-              <div style="margin-top:10px;">四级代理<el-input v-model="formData.invite_bonus_4" style="width: 100px;"></el-input>%</div>
-              <div style="margin-top:10px;">五级代理<el-input v-model="formData.invite_bonus_5" style="width: 100px;"></el-input>%</div>
+              <div style="margin-top:10px;">二级代理<el-input v-model="formData.invite_bonus_2"
+                  style="width: 100px;"></el-input>%</div>
+              <div style="margin-top:10px;">三级代理<el-input v-model="formData.invite_bonus_3"
+                  style="width: 100px;"></el-input>%</div>
+              <div style="margin-top:10px;">四级代理<el-input v-model="formData.invite_bonus_4"
+                  style="width: 100px;"></el-input>%</div>
+              <div style="margin-top:10px;">五级代理<el-input v-model="formData.invite_bonus_5"
+                  style="width: 100px;"></el-input>%</div>
             </el-form-item>
             <el-form-item label="白名单手机验证码">
               <el-input v-model="formData.white_code" style="width: 100px;"></el-input> 默认123456
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="业务配置">
+            <el-form-item label="策略手续费返现比例">
+              <el-input v-model="formData.strategy_fee_rebates_rate" style="width: 100px;"></el-input> %
+            </el-form-item>
             <el-form-item label="资产页文章栏标题">
               <el-input v-model="formData.article_cate" style="width: 200px;"></el-input>
             </el-form-item>
@@ -93,31 +90,19 @@
             </el-form-item>
             <el-form-item label="平台主币币种" prop="trade_coin">
               <el-select v-model="formData.web_coin" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in coinList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value+''">
+                <el-option v-for="item in coinList" :key="item.value" :label="item.label" :value="item.value + ''">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="交易使用币种" prop="trade_coin">
               <el-select v-model="formData.trade_coin" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in coinList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value+''">
+                <el-option v-for="item in coinList" :key="item.value" :label="item.label" :value="item.value + ''">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="手续费币种" prop="fee_coin">
               <el-select v-model="formData.fee_coin" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in coinList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value+''">
+                <el-option v-for="item in coinList" :key="item.value" :label="item.label" :value="item.value + ''">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -166,7 +151,8 @@
               <el-input v-model="formData.otc_max_trade_num" style="width: 100px;"></el-input>笔
             </el-form-item>
             <el-form-item label="OTC挂单数">
-                <el-input v-model="formData.otc_shop_min_num" style="width: 100px;"></el-input> - <el-input v-model="formData.otc_shop_max_num" style="width: 100px;"></el-input>
+              <el-input v-model="formData.otc_shop_min_num" style="width: 100px;"></el-input> - <el-input
+                v-model="formData.otc_shop_max_num" style="width: 100px;"></el-input>
             </el-form-item>
             <el-form-item label="商户浮动范围">
               <el-input v-model="formData.otc_shop_float" style="width: 100px;"></el-input>
@@ -178,10 +164,8 @@
               <el-input v-model="formData.otc_min_buy_num" style="width: 100px;"></el-input>
             </el-form-item>
             <el-form-item label="OTC手续费规则">
-              <el-input type="textarea"
-                        :rows="8"
-                        v-model="formData.otc_fee_rule" style="width: 300px;"></el-input>
-              <br/>如：<300=5表示小于和等于300手续费为5GUSD，>300=2表示大于和等于300手续费为2GUSD，每行一个规则
+              <el-input type="textarea" :rows="8" v-model="formData.otc_fee_rule" style="width: 300px;"></el-input>
+              <br />如：<300=5表示小于和等于300手续费为5GUSD，>300=2表示大于和等于300手续费为2GUSD，每行一个规则
             </el-form-item>
             <!--
             <el-form-item label="可交易币种" prop="trade_list">
@@ -207,15 +191,11 @@
               <el-input v-model="formData.borrow_rate" style="width: 100px;"></el-input> %
             </el-form-item>
             <el-form-item label="借贷利率">
-              <el-input type="textarea"
-                        :rows="5"
-                        v-model="formData.borrow_day_rate" style="width: 200px;"></el-input>
+              <el-input type="textarea" :rows="5" v-model="formData.borrow_day_rate" style="width: 200px;"></el-input>
               <div>格式为30=0.5，表示借贷30天，日利率为0.5%，可多行设置，每一行为一个设置项</div>
             </el-form-item>
             <el-form-item label="借贷须知">
-              <el-input type="textarea"
-                        :rows="18"
-                        v-model="formData.borrow_text" style="width: 500px;"></el-input>
+              <el-input type="textarea" :rows="18" v-model="formData.borrow_text" style="width: 500px;"></el-input>
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="充值相关">
@@ -232,10 +212,7 @@
               <el-input v-model="formData.recharge_price" style="width: 150px;"></el-input> 元
             </el-form-item>
             <el-form-item label="开启USDT直充">
-              <el-switch
-                v-model="formData.open_usdt"
-                active-value="1"
-                inactive-value="0">
+              <el-switch v-model="formData.open_usdt" active-value="1" inactive-value="0">
               </el-switch>
             </el-form-item>
             <el-form-item label="优盾钱包商户号">
@@ -257,44 +234,30 @@
               <el-input v-model="formData.qr_name" style="width: 100px;"></el-input> 如：支付宝
             </el-form-item>
             <el-form-item label="收款码">
-              <el-upload
-                class="avatar-uploader"
-                :action="uploadUrl"
-                :headers="headers"
-                :show-file-list="false"
-                accept="image/*"
-                :data="{name:'qr_url'}"
-                :on-success="handleUploadSuccess"
+              <el-upload class="avatar-uploader" :action="uploadUrl" :headers="headers" :show-file-list="false"
+                accept="image/*" :data="{ name: 'qr_url' }" :on-success="handleUploadSuccess"
                 :on-error="handelUploadError">
                 <img v-if="formData.qr_url" :src="formData.qr_url" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
             <el-form-item label="充值页提示">
-              <el-input type="textarea"
-                        :rows="8"
-                        v-model="formData.recharge_text" style="width: 400px;"></el-input>
+              <el-input type="textarea" :rows="8" v-model="formData.recharge_text" style="width: 400px;"></el-input>
             </el-form-item>
             <el-form-item label="充值页提示ERC20">
-              <el-input type="textarea"
-                        :rows="8"
-                        v-model="formData.recharge_text2" style="width: 400px;"></el-input>
+              <el-input type="textarea" :rows="8" v-model="formData.recharge_text2" style="width: 400px;"></el-input>
             </el-form-item>
             <el-form-item label="BTC收款地址">
               <el-input v-model="formData.btc_addr" style="width: 400px;"></el-input>
             </el-form-item>
             <el-form-item label="充值页提示BTC">
-              <el-input type="textarea"
-                        :rows="8"
-                        v-model="formData.recharge_text3" style="width: 400px;"></el-input>
+              <el-input type="textarea" :rows="8" v-model="formData.recharge_text3" style="width: 400px;"></el-input>
             </el-form-item>
             <el-form-item label="ETH收款地址">
               <el-input v-model="formData.eth_addr" style="width: 400px;"></el-input>
             </el-form-item>
             <el-form-item label="充值页提示ETH">
-              <el-input type="textarea"
-                        :rows="8"
-                        v-model="formData.recharge_text4" style="width: 400px;"></el-input>
+              <el-input type="textarea" :rows="8" v-model="formData.recharge_text4" style="width: 400px;"></el-input>
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="提现相关">
@@ -311,16 +274,15 @@
               <el-input v-model="formData.out_fee_rate" style="width: 100px;"></el-input> %
             </el-form-item>
             <el-form-item label="手续费规则">
-              <el-input type="textarea"
-                        :rows="8"
-                        v-model="formData.out_fee_rule" style="width: 300px;"></el-input>
-              <br/>如：<300=5表示小于和等于300手续费为5GUSD，>300=2表示大于和等于300手续费为2GUSD，每行一个规则
+              <el-input type="textarea" :rows="8" v-model="formData.out_fee_rule" style="width: 300px;"></el-input>
+              <br />如：<300=5表示小于和等于300手续费为5GUSD，>300=2表示大于和等于300手续费为2GUSD，每行一个规则
             </el-form-item>
             <el-form-item label="单日提现次数">
               <el-input v-model="formData.out_times" style="width: 150px;"></el-input> 次，不设置则无限制
             </el-form-item>
             <el-form-item label="当日提现">
-              <el-input v-model="formData.today_out_times" style="width: 150px;"></el-input> 次后，收取手续费 (设置为0或不设置，则每次提现都收取手续费，设置成负数后表示不收手续费)
+              <el-input v-model="formData.today_out_times" style="width: 150px;"></el-input> 次后，收取手续费
+              (设置为0或不设置，则每次提现都收取手续费，设置成负数后表示不收手续费)
             </el-form-item>
             <el-form-item label="新添加银行卡">
               <el-input v-model="formData.card_update_limit" style="width: 150px;"></el-input> 小时内不可提现，不设置则无限制
@@ -329,19 +291,13 @@
               <el-input v-model="formData.max_card" style="width: 150px;"></el-input> 张，不设置则无限制
             </el-form-item>
             <el-form-item label="提现页提示">
-              <el-input type="textarea"
-                        :rows="8"
-                        v-model="formData.out_text" style="width: 400px;"></el-input>
+              <el-input type="textarea" :rows="8" v-model="formData.out_text" style="width: 400px;"></el-input>
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="签到相关">
             <el-form-item label="签到周期" prop="sign_days">
               <el-select v-model="formData.sign_days" style="width: 100px;" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in 14"
-                  :key="item"
-                  :label="item"
-                  :value="item+''">
+                <el-option v-for="item in 14" :key="item" :label="item" :value="item + ''">
                 </el-option>
               </el-select>
               天
@@ -349,25 +305,18 @@
             <el-form-item label="每日签到">
               赠送 <el-input v-model="formData.sign_day_give" style="width: 100px;"></el-input> 个
               <el-select v-model="formData.sign_day_give_coin" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in coinList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value+''">
+                <el-option v-for="item in coinList" :key="item.value" :label="item.label" :value="item.value + ''">
                 </el-option>
               </el-select> 币
             </el-form-item>
             <el-form-item label="每日递规则">
-              <el-input v-model="formData.sign_day_give_rule" style="width: 150px;"></el-input> 如需要每天领取数比前一天多2枚则为+2，支持加号+和乘号*
+              <el-input v-model="formData.sign_day_give_rule" style="width: 150px;"></el-input>
+              如需要每天领取数比前一天多2枚则为+2，支持加号+和乘号*
             </el-form-item>
             <el-form-item label="签到结束">
               赠送 <el-input v-model="formData.sign_give" style="width: 100px;"></el-input> 个
               <el-select v-model="formData.sign_give_coin" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in coinList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value+''">
+                <el-option v-for="item in coinList" :key="item.value" :label="item.label" :value="item.value + ''">
                 </el-option>
               </el-select> 币
             </el-form-item>
@@ -375,9 +324,7 @@
               <el-input v-model="formData.sign_tip" style="width: 400px;"></el-input>
             </el-form-item>
             <el-form-item label="活动规则">
-              <el-input type="textarea"
-                        :rows="8"
-                        v-model="formData.sign_event" style="width: 400px;"></el-input>
+              <el-input type="textarea" :rows="8" v-model="formData.sign_event" style="width: 400px;"></el-input>
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="矿机相关">
@@ -409,7 +356,8 @@
               赠送 <el-input v-model="formData.reg_auth_give" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="首次充值满">
-              <el-input v-model="formData.first_recharge_num" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.first_recharge_give" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.first_recharge_num" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.first_recharge_give" style="width: 100px;"></el-input> 个币
             </el-form-item>
 
             <el-form-item label="当日完成交易">
@@ -419,88 +367,116 @@
               赠送 <el-input v-model="formData.today_invite_give" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="首次交易">
-              金额满 <el-input v-model="formData.first_trade_num" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.first_trade_give" style="width: 100px;"></el-input> 个币
+              金额满 <el-input v-model="formData.first_trade_num" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.first_trade_give" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="当日充值满">
-              <el-input v-model="formData.today_recharge_num_1" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.today_recharge_give_1" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.today_recharge_num_1" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.today_recharge_give_1" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="当日充值满">
-              <el-input v-model="formData.today_recharge_num_2" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.today_recharge_give_2" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.today_recharge_num_2" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.today_recharge_give_2" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="当日充值满">
-              <el-input v-model="formData.today_recharge_num_3" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.today_recharge_give_3" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.today_recharge_num_3" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.today_recharge_give_3" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="当日充值满">
-              <el-input v-model="formData.today_recharge_num_4" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.today_recharge_give_4" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.today_recharge_num_4" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.today_recharge_give_4" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="直推达到">
-              <el-input v-model="formData.day_invite" style="width: 100px;"></el-input>人，奖励 <el-input v-model="formData.day_invite_give" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.day_invite" style="width: 100px;"></el-input>人，奖励 <el-input
+                v-model="formData.day_invite_give" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="直推达到">
-              <el-input v-model="formData.day_invite_1" style="width: 100px;"></el-input>人，奖励 <el-input v-model="formData.day_invite_give_1" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.day_invite_1" style="width: 100px;"></el-input>人，奖励 <el-input
+                v-model="formData.day_invite_give_1" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="直推达到">
-              <el-input v-model="formData.day_invite_2" style="width: 100px;"></el-input>人，奖励 <el-input v-model="formData.day_invite_give_2" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.day_invite_2" style="width: 100px;"></el-input>人，奖励 <el-input
+                v-model="formData.day_invite_give_2" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="直推达到">
-              <el-input v-model="formData.day_invite_3" style="width: 100px;"></el-input>人，奖励 <el-input v-model="formData.day_invite_give_3" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.day_invite_3" style="width: 100px;"></el-input>人，奖励 <el-input
+                v-model="formData.day_invite_give_3" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="团队人数">
-              <el-input v-model="formData.team_total_count" style="width: 100px;"></el-input>人，奖励 <el-input v-model="formData.team_count_give" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.team_total_count" style="width: 100px;"></el-input>人，奖励 <el-input
+                v-model="formData.team_count_give" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="团队人数">
-              <el-input v-model="formData.team_total_count_1" style="width: 100px;"></el-input>人，奖励 <el-input v-model="formData.team_count_give_1" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.team_total_count_1" style="width: 100px;"></el-input>人，奖励 <el-input
+                v-model="formData.team_count_give_1" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="团队人数">
-              <el-input v-model="formData.team_total_count_2" style="width: 100px;"></el-input>人，奖励 <el-input v-model="formData.team_count_give_2" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.team_total_count_2" style="width: 100px;"></el-input>人，奖励 <el-input
+                v-model="formData.team_count_give_2" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="团队人数">
-              <el-input v-model="formData.team_total_count_3" style="width: 100px;"></el-input>人，奖励 <el-input v-model="formData.team_count_give_3" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.team_total_count_3" style="width: 100px;"></el-input>人，奖励 <el-input
+                v-model="formData.team_count_give_3" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="当日交易满">
-              <el-input v-model="formData.today_trade_num" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.today_trade_give" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.today_trade_num" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.today_trade_give" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="当日交易满">
-              <el-input v-model="formData.today_trade_num_1" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.today_trade_give_1" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.today_trade_num_1" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.today_trade_give_1" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="当月交易满">
-              <el-input v-model="formData.month_trade_num" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.month_trade_give" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.month_trade_num" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.month_trade_give" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="智能合约">
-              盈利达到<el-input v-model="formData.ai_trade_win_num_1" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.ai_trade_win_give_1" style="width: 100px;"></el-input> 个币
+              盈利达到<el-input v-model="formData.ai_trade_win_num_1" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.ai_trade_win_give_1" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="智能合约">
-              盈利达到<el-input v-model="formData.ai_trade_win_num_2" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.ai_trade_win_give_2" style="width: 100px;"></el-input> 个币
+              盈利达到<el-input v-model="formData.ai_trade_win_num_2" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.ai_trade_win_give_2" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="智能合约">
-              盈利达到<el-input v-model="formData.ai_trade_win_num_3" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.ai_trade_win_give_3" style="width: 100px;"></el-input> 个币
+              盈利达到<el-input v-model="formData.ai_trade_win_num_3" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.ai_trade_win_give_3" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="智能合约">
-              盈利达到<el-input v-model="formData.ai_trade_win_num_4" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.ai_trade_win_give_4" style="width: 100px;"></el-input> 个币
+              盈利达到<el-input v-model="formData.ai_trade_win_num_4" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.ai_trade_win_give_4" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="智能合约">
-              交易金额达到<el-input v-model="formData.ai_trade_num_1" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.ai_trade_give_1" style="width: 100px;"></el-input> 个币
+              交易金额达到<el-input v-model="formData.ai_trade_num_1" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.ai_trade_give_1" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="智能合约">
-              交易金额达到<el-input v-model="formData.ai_trade_num_2" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.ai_trade_give_2" style="width: 100px;"></el-input> 个币
+              交易金额达到<el-input v-model="formData.ai_trade_num_2" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.ai_trade_give_2" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="智能合约">
-              交易金额达到<el-input v-model="formData.ai_trade_num_3" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.ai_trade_give_3" style="width: 100px;"></el-input> 个币
+              交易金额达到<el-input v-model="formData.ai_trade_num_3" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.ai_trade_give_3" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="智能合约">
-              交易金额达到<el-input v-model="formData.ai_trade_num_4" style="width: 100px;"></el-input>USDT,赠送 <el-input v-model="formData.ai_trade_give_4" style="width: 100px;"></el-input> 个币
+              交易金额达到<el-input v-model="formData.ai_trade_num_4" style="width: 100px;"></el-input>USDT,赠送 <el-input
+                v-model="formData.ai_trade_give_4" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="交易">
-              满<el-input v-model="formData.trade_days_1" style="width: 100px;"></el-input>天,赠送 <el-input v-model="formData.trade_days_give_1" style="width: 100px;"></el-input> 个币
+              满<el-input v-model="formData.trade_days_1" style="width: 100px;"></el-input>天,赠送 <el-input
+                v-model="formData.trade_days_give_1" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="交易">
-              满<el-input v-model="formData.trade_days_2" style="width: 100px;"></el-input>天,赠送 <el-input v-model="formData.trade_days_give_2" style="width: 100px;"></el-input> 个币
+              满<el-input v-model="formData.trade_days_2" style="width: 100px;"></el-input>天,赠送 <el-input
+                v-model="formData.trade_days_give_2" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="当周直推" v-if="0">
-              <el-input v-model="formData.week_invite" style="width: 100px;"></el-input>人，奖励 <el-input v-model="formData.week_invite_give" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.week_invite" style="width: 100px;"></el-input>人，奖励 <el-input
+                v-model="formData.week_invite_give" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="当月直推" v-if="0">
-              <el-input v-model="formData.month_invite" style="width: 100px;"></el-input>人，奖励 <el-input v-model="formData.month_invite_give" style="width: 100px;"></el-input> 个币
+              <el-input v-model="formData.month_invite" style="width: 100px;"></el-input>人，奖励 <el-input
+                v-model="formData.month_invite_give" style="width: 100px;"></el-input> 个币
             </el-form-item>
             <el-form-item label="任务说明">
               <el-input v-model="formData.task_content" type="textarea" rows="6" style="width: 400px;"></el-input>
@@ -589,6 +565,7 @@
           free_up_times:'',
           free_up_time:'',
           help_up_time:'',
+          strategy_fee_rebates_rate:'',
           article_cate:'',
           article_count:'',
           invite_task:'',
@@ -743,6 +720,4 @@
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
