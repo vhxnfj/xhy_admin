@@ -166,7 +166,7 @@ export default {
       })
     },
     stopChange(row) {
-      if (row.status) {
+      if (!row.status) {
         updateStop(row.id).catch(error => {
           row.status = false;
         })

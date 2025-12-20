@@ -1,6 +1,7 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on"
+      label-position="left">
 
       <div class="title-container">
         <h3 class="title">管理系统登陆</h3>
@@ -10,67 +11,49 @@
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="请输入登陆名称"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
+        <el-input ref="username" v-model="loginForm.username" placeholder="请输入登陆名称" name="username" type="text"
+          tabindex="1" auto-complete="on" />
       </el-form-item>
 
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="请输入密码"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-        />
+        <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType"
+          placeholder="请输入密码" name="password" tabindex="2" auto-complete="on" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
+      </el-form-item>
+
+      <el-form-item prop="google_code">
+        <el-input ref="google_code" v-model="loginForm.google_code" placeholder="请输入谷歌验证码（选填）" name="google_code"
+          type="text" tabindex="3" />
       </el-form-item>
 
       <el-form-item prop="captcha">
         <span class="svg-container">
           <svg-icon icon-class="example" />
         </span>
-        <el-input
-          ref="captcha"
-          v-model="loginForm.captcha"
-          placeholder="请输入验证码"
-          name="captcha"
-          type="text"
-          tabindex="3"
-          style="width: 210px;"
-          @keyup.enter.native="handleLogin"
-        />
+        <el-input ref="captcha" v-model="loginForm.captcha" placeholder="请输入验证码" name="captcha" type="text" tabindex="4"
+          style="width: 210px;" @keyup.enter.native="handleLogin" />
         <img class="captcha-img" @click="refreshCaptcha()" title="点击刷新验证码" :src="captcha_url" />
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登陆</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin">登陆
+      </el-button>
 
     </el-form>
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (value.length==0) {
+      if (value.length == 0) {
         callback(new Error('请输入管理员账号'))
       } else {
         callback()
@@ -84,7 +67,7 @@ export default {
       }
     }
     const validateCaptcha = (rule, value, callback) => {
-      if (value.length==0) {
+      if (value.length == 0) {
         callback(new Error('请输入验证码'))
       } else {
         callback()
@@ -92,17 +75,18 @@ export default {
     }
     var t = (new Date()).getTime();
     return {
-      captcha_url:process.env.VUE_APP_BASE_API+"captcha?t="+t,
-      time:t,
+      captcha_url: process.env.VUE_APP_BASE_API + "captcha?t=" + t,
+      time: t,
       loginForm: {
         username: '',
         password: '',
-        captcha:''
+        captcha: '',
+        google_code: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        captcha: [{ required: true, trigger: 'blur', validator: validateCaptcha }]
+        captcha: [{ required: true, trigger: 'blur', validator: validateCaptcha }],
       },
       loading: false,
       passwordType: 'password',
@@ -111,7 +95,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
@@ -128,16 +112,16 @@ export default {
         this.$refs.password.focus()
       })
     },
-    refreshCaptcha(){
+    refreshCaptcha() {
       var t = (new Date()).getTime();
       this.time = t;
-      this.captcha_url = process.env.VUE_APP_BASE_API+"captcha?t="+t;
+      this.captcha_url = process.env.VUE_APP_BASE_API + "captcha?t=" + t;
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.loginForm['time'] =  this.time;
+          this.loginForm['time'] = this.time;
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
@@ -160,8 +144,8 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -204,9 +188,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;
@@ -264,7 +248,8 @@ $light_gray:#eee;
     cursor: pointer;
     user-select: none;
   }
-  .captcha-img{
+
+  .captcha-img {
     width: 200px;
     height: 56px;
     display: inline-block;

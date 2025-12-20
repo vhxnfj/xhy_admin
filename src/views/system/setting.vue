@@ -79,6 +79,9 @@
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="业务配置">
+            <el-form-item label="策略手续费率">
+              <el-input v-model="formData.strategy_fee_rate" style="width: 100px;"></el-input> %
+            </el-form-item>
             <el-form-item label="策略手续费返现比例">
               <el-input v-model="formData.strategy_fee_rebates_rate" style="width: 100px;"></el-input> %
             </el-form-item>
@@ -565,6 +568,7 @@
           free_up_times:'',
           free_up_time:'',
           help_up_time:'',
+          strategy_fee_rate:'',
           strategy_fee_rebates_rate:'',
           article_cate:'',
           article_count:'',

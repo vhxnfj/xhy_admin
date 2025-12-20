@@ -7,8 +7,8 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    username:'',
-    group_id:''
+    username: '',
+    group_id: ''
   }
 }
 
@@ -38,9 +38,9 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password ,captcha,time} = userInfo
+    const { username, password, captcha, time, google_code } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password ,captcha,time}).then(response => {
+      login({ username: username.trim(), password: password, captcha, time, google_code }).then(response => {
         const { data } = response;
         commit('SET_TOKEN', data)
         setToken(data)
@@ -51,10 +51,10 @@ const actions = {
     })
   },
 
-  updateInfo({ commit, state },userInfo){
+  updateInfo({ commit, state }, userInfo) {
     commit('SET_NAME', userInfo.name)
     commit('SET_AVATAR', userInfo.avatar)
-    commit('SET_USER_NAME',userInfo.username)
+    commit('SET_USER_NAME', userInfo.username)
   },
 
   // get user info
@@ -67,12 +67,12 @@ const actions = {
           reject('登陆超时，请重新登陆!')
         }
 
-        const { name, avatar ,username,group_id} = data
+        const { name, avatar, username, group_id } = data
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
-        commit('SET_USER_NAME',username)
-        commit('SET_USER_GROUP',group_id)
+        commit('SET_USER_NAME', username)
+        commit('SET_USER_GROUP', group_id)
         resolve(data)
       }).catch(error => {
         reject(error)

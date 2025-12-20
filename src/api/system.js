@@ -54,3 +54,15 @@ export function indexCount() {
 export function globalData() {
   return request.get("global")
 }
+
+export function getGoogleInfo(id) {
+  return request.get(`getGoogleInfo?id=${id}`)
+}
+
+export function bindGoogle(data) {
+  return request.post('bindGoogle', data)
+}
+
+export function unbindGoogle(data) {
+  return request.post('unbindGoogle', data)
+}
