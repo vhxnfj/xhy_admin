@@ -8,6 +8,12 @@
         <el-form-item>
           <el-button type="primary" @click="handleSearch">查询</el-button>
         </el-form-item>
+        <el-form-item label="查询用户下级购买策略情况">
+          <el-input v-model="subordinateQueryUsername" placeholder="请输入用户名" clearable style="width: 200px;" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="success" @click="handleGetSubordinatesWithStrategy">查询</el-button>
+        </el-form-item>
       </el-form>
     </div>
 
@@ -32,8 +38,15 @@
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="ID" width="80" align="center" />
       <el-table-column prop="order_no" label="订单号" min-width="150" />
-      <el-table-column prop="username" label="用户" width="120" align="center" />
-      <el-table-column prop="strategy_config.coin_name" label="策略币种" width="100" align="center" />
+      <el-table-column label="用户" width="160" align="center">
+        <template slot-scope="{row}">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+            <span>{{ row.username }}</span>
+            <el-tag v-if="row.is_white" size="mini">白</el-tag>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="coin_name" label="币种" width="100" align="center" />
       <el-table-column prop="side" label="方向" width="80" align="center">
         <template slot-scope="{row}">
           <el-tag :type="row.side === 'long' ? 'success' : 'danger'">
@@ -70,9 +83,10 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="180" align="center" fixed="right">
+      <el-table-column label="操作" width="240" align="center" fixed="right">
         <template slot-scope="{row}">
           <!-- <el-button type="warning" size="mini" @click="handleForceClose(row)" v-if="row.status === 1">强平</el-button> -->
+          <el-button type="primary" size="mini" @click="handleEdit(row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="handleForceLiquidate(row)" v-if="row.status === 1">爆仓</el-button>
           <!-- <el-button type="primary" size="mini" @click="handleEditPnl(row)" v-if="row.status !== 1">改盈亏</el-button> -->
         </template>
@@ -101,6 +115,42 @@
       </div>
     </el-dialog>
 
+    <!-- 编辑订单对话框 -->
+    <el-dialog title="编辑订单" :visible.sync="editDialogVisible" width="500px">
+      <el-form :model="editTemp" label-width="100px">
+        <el-form-item label="币种">
+          <el-select v-model="editTemp.coin_id" placeholder="请选择币种" style="width: 100%">
+            <el-option v-for="item in coinOptions" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="杠杆倍数">
+          <el-input-number v-model="editTemp.leverage" :min="1" :max="125" />
+        </el-form-item>
+        <el-form-item label="买入金额">
+          <el-input-number v-model="editTemp.buy_amount" :min="0" :precision="2" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="submitEdit">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 下级购买策略用户对话框 -->
+    <el-dialog title="下级购买策略用户列表" :visible.sync="subordinateDialogVisible" width="700px" class="subordinate-dialog">
+      <div style="margin-bottom: 15px;">
+        <el-tag type="info">共找到 {{ subordinateUsers.length }} 位下级用户购买了策略</el-tag>
+      </div>
+      <el-table :data="subordinateUsers" style="width: 100%" max-height="400" class="subordinate-table">
+        <el-table-column prop="id" label="ID" width="80" align="center" />
+        <el-table-column prop="username" label="用户名" align="center" />
+        <el-table-column prop="real_name" label="真实姓名" align="center" />
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="subordinateDialogVisible = false">关闭</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -111,11 +161,13 @@ import {
   forceCloseStrategyOrder,
   forceLiquidateStrategyOrder,
   updateStrategyOrderPnl,
-  deleteStrategyOrder,
   batchForceCloseStrategyOrder,
   batchDeleteStrategyOrder,
-  executeStrategyProfit
+  executeStrategyProfit,
+  updateStrategyOrder,
+  getSubordinatesWithStrategy
 } from '@/api/strategy'
+import { getList } from '@/api/coin'
 
 export default {
   name: 'StrategyOrder',
@@ -136,12 +188,25 @@ export default {
         id: undefined,
         old_pnl: 0,
         new_pnl: 0
-      }
+      },
+      editDialogVisible: false,
+      editTemp: {
+        id: undefined,
+        coin_id: undefined,
+        leverage: 1,
+        buy_amount: 0
+      },
+      coinOptions: [],
+      // 下级购买策略用户相关
+      subordinateQueryUsername: '',
+      subordinateDialogVisible: false,
+      subordinateUsers: []
     }
   },
   created() {
     this.getList()
     this.getStatistics()
+    this.getCoinOptions()
   },
   methods: {
     handleExecuteProfit() {
@@ -225,6 +290,32 @@ export default {
         this.getList()
       })
     },
+    getCoinOptions() {
+      getList('').then(({ data }) => {
+        this.coinOptions = data || []
+      })
+    },
+    handleEdit(row) {
+      this.editTemp = {
+        id: row.id,
+        coin_id: row.coin_id,
+        leverage: row.leverage,
+        buy_amount: row.buy_amount
+      }
+      this.editDialogVisible = true
+    },
+    submitEdit() {
+      updateStrategyOrder({
+        id: this.editTemp.id,
+        coin_id: this.editTemp.coin_id,
+        leverage: this.editTemp.leverage,
+        buy_amount: this.editTemp.buy_amount
+      }).then(() => {
+        this.editDialogVisible = false
+        this.$message.success('订单修改成功')
+        this.getList()
+      })
+    },
     handleBatchForceClose() {
       this.$confirm('确认批量强制平仓选中订单?', '提示', {
         confirmButtonText: '确定',
@@ -248,13 +339,28 @@ export default {
           this.getList()
         })
       })
+    },
+    // 查询下级购买策略用户
+    handleGetSubordinatesWithStrategy() {
+      if (!this.subordinateQueryUsername) {
+        this.$message.warning('请输入用户名')
+        return
+      }
+      getSubordinatesWithStrategy({ username: this.subordinateQueryUsername }).then(({ data }) => {
+        this.subordinateUsers = data.users || []
+        this.subordinateDialogVisible = true
+      })
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 .statistics-box {
   margin-bottom: 20px;
 }
+
+/* .subordinate-table .el-table__body {
+  width: 100% !important;
+} */
 </style>

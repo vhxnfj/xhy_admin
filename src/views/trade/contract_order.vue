@@ -9,13 +9,8 @@
           <el-input v-model="formLine.name" placeholder="用户名" clearable></el-input>
         </el-form-item>
         <el-form-item label="时间">
-          <el-date-picker
-            v-model="formLine.date"
-            type="daterange"
-            value-format="yyyy-MM-dd"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
+          <el-date-picker v-model="formLine.date" type="daterange" value-format="yyyy-MM-dd" range-separator="至"
+            start-placeholder="开始日期" end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -24,22 +19,14 @@
       </el-form>
     </div>
 
-    <el-dialog
-      title="执行策略"
-      :visible.sync="dialogShow"
-      width="600px">
+    <el-dialog title="执行策略" :visible.sync="dialogShow" width="600px">
       <el-form :model="formData" ref="infoForm" label-width="100px" style="width: 500px;">
         <el-form-item label="币种名称" prop="name">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
         <el-form-item label="创建时间" prop="username">
-          <el-date-picker
-            v-model="formData.date"
-            type="datetimerange"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
+          <el-date-picker v-model="formData.date" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss"
+            range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="购买数量" prop="buy_count">
@@ -75,124 +62,66 @@
       <div class="page-tab-box">
         <el-radio-group v-model="formLine.status" @change="handleClickTab">
           <el-radio-button label="0">全部</el-radio-button>
-          <el-radio-button :label="item.value" v-for="(item,index) in options" :key="index">{{item.label}}</el-radio-button>
+          <el-radio-button :label="item.value" v-for="(item, index) in options"
+            :key="index">{{ item.label }}</el-radio-button>
         </el-radio-group>
       </div>
 
       <div style="padding: 20px;background: #f1f1f1;">
-        合约总量：<b>{{tongji.total}}</b>，进行中：<b>{{tongji.runing}}</b>，已完成：<b>{{tongji.success}}</b>，收益：<b>{{tongji.totalReward}}</b>
+        合约总量：<b>{{ tongji.total }}</b>，进行中：<b>{{ tongji.runing }}</b>，已完成：<b>{{ tongji.success }}</b>，收益：<b>{{ tongji.totalReward }}</b>
       </div>
 
-      <el-table
-        :data="tableData"
-        border
-        v-loading="loading"
-        @selection-change="handleSelectionChange"
+      <el-table :data="tableData" border v-loading="loading" @selection-change="handleSelectionChange"
         style="width: 100%">
-        <el-table-column
-          type="selection"
-          align="center"
-          fixed="left"
-          width="55">
+        <el-table-column type="selection" align="center" fixed="left" width="55">
         </el-table-column>
-        <el-table-column
-          prop="order_no"
-          label="流水号"
-          align="center"
-          fixed="left"
-          width="180">
+        <el-table-column prop="order_no" label="流水号" align="center" fixed="left" width="180">
         </el-table-column>
-        <el-table-column
-          prop="coin"
-          label="币种"
-          fixed="left"
-          min-width="120">
+        <el-table-column prop="coin" label="币种" fixed="left" min-width="120">
         </el-table-column>
-        <el-table-column
-          prop="username"
-          label="用户"
-          align="center"
-          width="120">
+        <el-table-column prop="username" label="用户" align="center" width="120">
         </el-table-column>
-        <el-table-column
-          prop="num"
-          label="投资币数"
-          align="center"
-          width="140">
+        <el-table-column prop="num" label="投资币数" align="center" width="140">
           <template slot-scope="{row}">
-            {{row.num}} {{row.trade_coin}}
+            {{ row.num }} {{ row.trade_coin }}
           </template>
         </el-table-column>
-        <el-table-column
-          prop="count"
-          label="购买数量"
-          align="center"
-          width="100">
+        <el-table-column prop="count" label="购买数量" align="center" width="100">
         </el-table-column>
-        <el-table-column
-          prop="get_return"
-          label="收益"
-          align="center"
-          width="150">
+        <el-table-column prop="get_return" label="收益" align="center" width="150">
           <template slot-scope="{row}">
-            <span :style="{color:row.flag ? 'green' : 'red'}">{{row.flag ? '+' : ''}}{{row.get_return}}</span>
+            <span :style="{ color: row.flag ? 'green' : 'red' }">{{ row.flag ? '+' : '' }}{{ row.get_return }}</span>
             <span v-if="row.is_paid">已赔付</span>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="num"
-          label="收益率"
-          align="center"
-          width="100">
+        <el-table-column prop="num" label="收益率" align="center" width="100">
           <template slot-scope="{row}">
-            {{row.get_return_rate}}%
+            {{ row.get_return_rate }}%
           </template>
         </el-table-column>
-        <el-table-column
-          prop="fee"
-          label="手续费"
-          align="center"
-          width="120">
+        <el-table-column prop="fee" label="手续费" align="center" width="120">
           <template slot-scope="{row}">
-            {{row.fee}} {{row.trade_coin}}
+            {{ row.fee }} {{ row.trade_coin }}
           </template>
         </el-table-column>
-        <el-table-column
-          prop="fee_rate"
-          label="手续费费率"
-          align="center"
-          width="100">
+        <el-table-column prop="fee_rate" label="手续费费率" align="center" width="100">
           <template slot-scope="{row}">
-            {{row.fee_rate}}%
+            {{ row.fee_rate }}%
           </template>
         </el-table-column>
-        <el-table-column
-          prop="status"
-          label="订单状态"
-          align="center"
-          fixed="right"
-          width="80">
+        <el-table-column prop="status" label="订单状态" align="center" fixed="right" width="80">
           <template slot-scope="{row}">
-            <el-tag v-if="row.status==0">{{row.statusName}}</el-tag>
-            <el-tag type="success" v-else-if="row.status==1">{{row.statusName}}</el-tag>
-            <el-tag type="info" v-else>{{row.statusName}}</el-tag>
+            <el-tag v-if="row.status == 0">{{ row.statusName }}</el-tag>
+            <el-tag type="success" v-else-if="row.status == 1">{{ row.statusName }}</el-tag>
+            <el-tag type="info" v-else>{{ row.statusName }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="created_at"
-          width="160"
-          fixed="right"
-          label="下单时间">
+        <el-table-column prop="created_at" width="160" fixed="right" label="下单时间">
         </el-table-column>
       </el-table>
       <div class="pagination-box">
-        <el-pagination
-          background
-          layout="total, sizes, prev, pager, next, jumper"
-          :page-size="pagesize"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :total="meta.total">
+        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :page-size="pagesize"
+          @size-change="handleSizeChange" @current-change="handleCurrentChange" :total="meta.total">
         </el-pagination>
       </div>
     </el-card>
@@ -201,49 +130,49 @@
 </template>
 
 <script>
-import { getList,successContract, getTongji,doPaid,doOrder} from '@/api/contract_order'
+import { getList, successContract, getTongji, doPaid, doOrder } from '@/api/contract_order'
 
 export default {
   name: 'contract_order',
-  data(){
+  data() {
     return {
-      dialogShow:false,
-      dialogShow2:false,
-      dialogShow3:false,
-      submiting:false,
-      props:{
+      dialogShow: false,
+      dialogShow2: false,
+      dialogShow3: false,
+      submiting: false,
+      props: {
         label: 'title',
         children: 'children',
         isLeaf: 'leaf'
       },
-      treeData:[],
-      nowRow:null,
+      treeData: [],
+      nowRow: null,
       tableData: [],
-      page:1,
-      pagesize:20,
-      meta:{
-        total:0
+      page: 1,
+      pagesize: 20,
+      meta: {
+        total: 0
       },
-      activeType:'0',
-      loading:false,
-      formData:{
-        name:'',
-        date:[],
-        min_count:'',
-        max_count:'',
-        return_start_rate:'',
-        return_end_rate:'',
-        loss_start_rate:'',
-        loss_end_rate:''
+      activeType: '0',
+      loading: false,
+      formData: {
+        name: '',
+        date: [],
+        min_count: '',
+        max_count: '',
+        return_start_rate: '',
+        return_end_rate: '',
+        loss_start_rate: '',
+        loss_end_rate: ''
       },
-      formLine:{
-        order_no:'',
-        name:'',
-        days:'',
-        status:0,
-        date:null
+      formLine: {
+        order_no: '',
+        name: '',
+        days: '',
+        status: 0,
+        date: null
       },
-      selectList:[],
+      selectList: [],
       options: [{
         value: '1',
         label: '进行中'
@@ -257,12 +186,12 @@ export default {
         value: '4',
         label: '已赔付'
       }],
-      moneyForm:{},
-      is_subminting:false,
-      checkedList:[],
-      contractList:[],
-      contractSelectList:[],
-      tongji:{total:'-',totalReward:'-',runing:'-',cancel:'-',sended:'-'}
+      moneyForm: {},
+      is_subminting: false,
+      checkedList: [],
+      contractList: [],
+      contractSelectList: [],
+      tongji: { total: '-', totalReward: '-', runing: '-', cancel: '-', sended: '-' }
     }
   },
   computed: {
@@ -271,32 +200,32 @@ export default {
   created() {
     this.getList();
   },
-  methods:{
-    search(){
+  methods: {
+    search() {
       this.page = 1;
       this.getList();
     },
-    handleClickTab(val){
+    handleClickTab(val) {
       this.formLine.status = val;
       this.page = 1;
       this.getList();
     },
-    getList(){
-      var param = 'page='+this.page+"&pagesize="+this.pagesize
-        +"&order_no="+this.formLine.order_no+"&name="+this.formLine.name+"&days="+this.formLine.days
-        +"&order_no="+this.formLine.order_no+"&status="+this.formLine.status;
-      if(this.formLine.date){
-        param += "&start="+this.formLine.date[0]+"&end="+this.formLine.date[1]
+    getList() {
+      var param = 'page=' + this.page + "&pagesize=" + this.pagesize
+        + "&order_no=" + this.formLine.order_no + "&name=" + this.formLine.name + "&days=" + this.formLine.days
+        + "&order_no=" + this.formLine.order_no + "&status=" + this.formLine.status;
+      if (this.formLine.date) {
+        param += "&start=" + this.formLine.date[0] + "&end=" + this.formLine.date[1]
       }
       this.loading = true;
-      getList(param).then(res=>{
+      getList(param).then(res => {
         this.loading = false;
         this.tableData = res.data;
         this.meta = res.meta;
-      }).catch(error=>{
+      }).catch(error => {
         this.loading = false;
       });
-      getTongji(param).then(res=>{
+      getTongji(param).then(res => {
         this.tongji = res.data
       })
     },
@@ -308,42 +237,42 @@ export default {
       this.page = val;
       this.getList();
     },
-    handleSelectionChange(val){
+    handleSelectionChange(val) {
       this.selectList = [];
-      for(var i=0;i<val.length;i++){
+      for (var i = 0; i < val.length; i++) {
         this.selectList.push(val[i].id);
       }
     },
-    handlePaid(){
+    handlePaid() {
       this.$confirm('是否赔付所选择的订单？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        doPaid({list:this.selectList}).then(res=>{
+        doPaid({ list: this.selectList }).then(res => {
           this.getList();
           this.$message.success(res.message);
         });
       })
     },
-    handleOrder(){
+    handleOrder() {
       this.dialogShow = true;
     },
-    handleCancel(){
+    handleCancel() {
       this.dialogShow = false;
     },
-    onSubmit(){
+    onSubmit() {
       this.submiting = true;
-      doOrder(this.formData).then(res=>{
+      doOrder(this.formData).then(res => {
         this.handleCancel();
         this.submiting = false;
         this.$message.success(res.message)
-      }).catch(()=>{
+      }).catch(() => {
         this.submiting = false;
       })
     },
-    successContract(row){
-      successContract(row.id).then(res=>{
+    successContract(row) {
+      successContract(row.id).then(res => {
         this.$message.success(res.message)
       })
     }
@@ -351,6 +280,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

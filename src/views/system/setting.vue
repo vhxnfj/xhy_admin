@@ -296,6 +296,9 @@
             <el-form-item label="提现页提示">
               <el-input type="textarea" :rows="8" v-model="formData.out_text" style="width: 400px;"></el-input>
             </el-form-item>
+            <el-form-item label="提现成功提示文本">
+              <el-input type="textarea" :rows="8" v-model="formData.withdraw_success_text" style="width: 400px;"></el-input>
+            </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="签到相关">
             <el-form-item label="签到周期" prop="sign_days">
@@ -565,6 +568,7 @@
           card_update_limit:'',
           max_card:'',
           out_text:'',
+          withdraw_success_text:'',
           free_up_times:'',
           free_up_time:'',
           help_up_time:'',

@@ -178,3 +178,21 @@ export function executeStrategyProfit(id) {
     method: "get"
   });
 }
+
+// 更新订单信息
+export function updateStrategyOrder(data) {
+  return request({
+    url: "/strategy-order/update",
+    method: "post",
+    data
+  });
+}
+
+// 获取下级购买策略用户
+export function getSubordinatesWithStrategy(query) {
+  return request({
+    url: "/strategy-order/get-subordinates-with-strategy",
+    method: "get",
+    params: query
+  });
+}
