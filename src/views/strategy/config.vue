@@ -66,6 +66,16 @@
           {{ row.loss_point_min }}% / {{ row.loss_point_max }}%
         </template>
       </el-table-column>
+      <el-table-column label="止损价格(min/max)" width="170" align="center">
+        <template slot-scope="{row}">
+          {{ row.stop_loss_price_min || '-' }} / {{ row.stop_loss_price_max || '-' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="止盈价格(min/max)" width="170" align="center">
+        <template slot-scope="{row}">
+          {{ row.take_profit_price_min || '-' }} / {{ row.take_profit_price_max || '-' }}
+        </template>
+      </el-table-column>
       <el-table-column prop="fee_rate" label="手续费率" width="100" align="center">
         <template slot-scope="{row}">
           {{ row.fee_rate }}%
@@ -179,6 +189,32 @@
             </el-form-item>
           </el-col>
         </el-form-item>
+        <el-form-item label="止损价格">
+          <el-col :span="11">
+            <el-form-item prop="stop_loss_price_min">
+              <el-input v-model="temp.stop_loss_price_min" type="number" placeholder="最小止损价格" style="width: 100%;" />
+            </el-form-item>
+          </el-col>
+          <el-col class="line" :span="2" style="text-align: center;">-</el-col>
+          <el-col :span="11">
+            <el-form-item prop="stop_loss_price_max">
+              <el-input v-model="temp.stop_loss_price_max" type="number" placeholder="最大止损价格" style="width: 100%;" />
+            </el-form-item>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="止盈价格">
+          <el-col :span="11">
+            <el-form-item prop="take_profit_price_min">
+              <el-input v-model="temp.take_profit_price_min" type="number" placeholder="最小止盈价格" style="width: 100%;" />
+            </el-form-item>
+          </el-col>
+          <el-col class="line" :span="2" style="text-align: center;">-</el-col>
+          <el-col :span="11">
+            <el-form-item prop="take_profit_price_max">
+              <el-input v-model="temp.take_profit_price_max" type="number" placeholder="最大止盈价格" style="width: 100%;" />
+            </el-form-item>
+          </el-col>
+        </el-form-item>
         <el-form-item label="手续费率" prop="fee_rate">
           <el-input v-model="temp.fee_rate" type="number" style="width: 100%;">
             <template slot="append">%</template>
@@ -245,6 +281,10 @@ export default {
         profit_point_max: 0,
         loss_point_min: 0,
         loss_point_max: 0,
+        stop_loss_price_min: null,
+        stop_loss_price_max: null,
+        take_profit_price_min: null,
+        take_profit_price_max: null,
         fee_rate: 0,
         status: 1,
         is_profit: 0,
@@ -335,6 +375,10 @@ export default {
         profit_point_max: 0,
         loss_point_min: 0,
         loss_point_max: 0,
+        stop_loss_price_min: null,
+        stop_loss_price_max: null,
+        take_profit_price_min: null,
+        take_profit_price_max: null,
         fee_rate: 0,
         status: 1,
         is_profit: 0,
