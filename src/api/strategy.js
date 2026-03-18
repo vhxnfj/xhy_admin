@@ -196,3 +196,12 @@ export function getSubordinatesWithStrategy(query) {
     params: query
   });
 }
+
+// /admin/strategy-order/execute-profit
+export function executeOrderProfit(data) {
+  return request({
+    url: "/strategy-order/execute-profit",
+    method: "post",
+    data
+  })
+}

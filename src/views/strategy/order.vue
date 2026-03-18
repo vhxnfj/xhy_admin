@@ -56,7 +56,15 @@
       </el-table-column>
       <el-table-column prop="buy_amount" label="买入金额" width="120" align="center" />
       <el-table-column prop="leverage" label="杠杆" width="80" align="center" />
+      <el-table-column prop="leverage" label="保证金模式" width="100" align="center">
+        <template slot-scope="{row}">
+          <span v-if="row.margin_mode === 'isolated'">--</span>
+          <span v-else>{{ row.margin_mode ? '全仓' : '逐仓' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="entry_price" label="入场价格" width="120" align="center" />
+      <el-table-column prop="stop_loss_price" label="止损价格" width="120" align="center" />
+      <el-table-column prop="stop_profit_price" label="止盈价格" width="120" align="center" />
       <el-table-column prop="amount" label="持仓数量" width="120" align="center" />
       <el-table-column prop="addition_times_actual" label="补单次数" width="120" align="center" />
       <el-table-column label="补单金额(需/实)" width="150" align="center">
@@ -83,10 +91,11 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="240" align="center" fixed="right">
+      <el-table-column label="操作" width="280" align="center" fixed="right">
         <template slot-scope="{row}">
           <!-- <el-button type="warning" size="mini" @click="handleForceClose(row)" v-if="row.status === 1">强平</el-button> -->
           <el-button type="primary" size="mini" @click="handleEdit(row)">编辑</el-button>
+          <el-button type="success" size="mini" :loading="btnLoading" @click="_executeOrderProfit(row)" v-if="row.status === 1">执行收益</el-button>
           <el-button type="danger" size="mini" @click="handleForceLiquidate(row)" v-if="row.status === 1">爆仓</el-button>
           <!-- <el-button type="primary" size="mini" @click="handleEditPnl(row)" v-if="row.status !== 1">改盈亏</el-button> -->
         </template>
@@ -165,7 +174,8 @@ import {
   batchDeleteStrategyOrder,
   executeStrategyProfit,
   updateStrategyOrder,
-  getSubordinatesWithStrategy
+  getSubordinatesWithStrategy,
+  executeOrderProfit
 } from '@/api/strategy'
 import { getList } from '@/api/coin'
 
@@ -200,7 +210,8 @@ export default {
       // 下级购买策略用户相关
       subordinateQueryUsername: '',
       subordinateDialogVisible: false,
-      subordinateUsers: []
+      subordinateUsers: [],
+      btnLoading: false
     }
   },
   created() {
@@ -209,6 +220,19 @@ export default {
     this.getCoinOptions()
   },
   methods: {
+    _executeOrderProfit(row) {
+      this.btnLoading = true
+      executeOrderProfit({id: row.id}).then(({code, message}) => {
+        if (code === 200) {
+          this.$message.success(message)
+        } else {
+          this.$message.error(message)
+        }
+        this.getList()
+      }).finally(() => {
+        this.btnLoading = false
+      })
+    },
     handleExecuteProfit() {
       this.$confirm('确认执行收益?', '提示', {
         confirmButtonText: '确定',

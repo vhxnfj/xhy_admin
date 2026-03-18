@@ -116,6 +116,13 @@
             <el-form-item label="合约交易">
               最大 <el-input v-model="formData.trade_max_count" style="width: 100px;"></el-input> 手/次
             </el-form-item>
+            <el-form-item label="合约倍数配置">
+              <el-input v-model="formData.contract_multiplier" style="width: 400px;" type="textarea"></el-input>
+              <div>示例：5,10,15,20,50，多个用逗号隔开</div>
+            </el-form-item>
+            <el-form-item label="风险提示文本">
+              <el-input v-model="formData.contract_risk_text" style="width: 400px;" type="textarea"></el-input>
+            </el-form-item>
             <el-form-item label="合约交易">
               收取 <el-input v-model="formData.trade_fee" style="width: 100px;"></el-input> %，手续费
             </el-form-item>
@@ -616,6 +623,8 @@
           invite_bonus_5:'',
           licai_rate:'',
           trade_max_count:'',
+          contract_multiplier:'',
+          contract_risk_text:'',
           trade_fee:'',
           total_get_reward:'',
           miner_level:'',
